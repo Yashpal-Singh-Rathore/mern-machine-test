@@ -1,9 +1,8 @@
 import express from "express";
+import { healthCheck } from "../controllers/index.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.status(200).send("Backend is running");
-});
+router.get("/", healthCheck);
 
 export default router;
