@@ -28,6 +28,12 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "agent"],
       default: "admin",
     },
+
+    mobile: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
   {
     timestamps: true,

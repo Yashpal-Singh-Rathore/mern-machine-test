@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
 import indexRoutes from "./src/routes/index.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import agentRoutes from "./src/routes/agent.routes.js";
+import uploadRoutes from "./src/routes/upload.routes.js";
 
 dotenv.config();
 // connect to database
@@ -17,6 +19,8 @@ app.use(express.json());
 // mount routes
 app.use("/", indexRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/agents", agentRoutes);
+app.use("/api", uploadRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
