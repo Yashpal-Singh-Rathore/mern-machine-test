@@ -1,26 +1,30 @@
 import { useState } from "react";
+import { loginUser } from "../services/authService";
 
 function LoginForm({ onSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   function handleChange(event) {
     const { name, value } = event.target;
 
-    if (name === "email") {
-      setEmail(value);
-    }
-
-    if (name === "password") {
-      setPassword(value);
-    }
+    if (name === "email") setEmail(value);
+    if (name === "password") setPassword(value);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-    onSuccess();
+    setError("");
+
+    try {
+      const data = await loginUser(email, password);
+      console.log("Login success:", data);
+
+      onSuccess(data);
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
@@ -44,6 +48,8 @@ function LoginForm({ onSuccess }) {
           onChange={handleChange}
         />
       </div>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <button type="submit">Login</button>
     </form>

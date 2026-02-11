@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
+import cors from "cors";
 import indexRoutes from "./src/routes/index.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import agentRoutes from "./src/routes/agent.routes.js";
@@ -14,6 +15,12 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // middleware
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // mount routes

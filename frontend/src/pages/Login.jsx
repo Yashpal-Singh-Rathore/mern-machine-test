@@ -4,7 +4,8 @@ import LoginForm from "../components/LoginForm";
 function Login() {
   const navigate = useNavigate();
 
-  function handleLoginSuccess() {
+  function handleLoginSuccess(data) {
+    console.log("User data:", data);
     navigate("/dashboard");
   }
 
