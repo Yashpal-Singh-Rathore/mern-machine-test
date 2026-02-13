@@ -17,3 +17,25 @@ export async function loginUser(email, password) {
 
   return data;
 }
+
+export async function fetchWithAuth(url, options = {}) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  });
+
+  if (response.status === 401) {
+    // token invalid or expired
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+    return;
+  }
+
+  return response;
+}

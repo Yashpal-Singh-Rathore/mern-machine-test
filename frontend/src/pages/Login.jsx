@@ -5,7 +5,11 @@ function Login() {
   const navigate = useNavigate();
 
   function handleLoginSuccess(data) {
-    console.log("User data:", data);
+    const token = data.token;
+
+    // Store token in local storage
+    localStorage.setItem("token", token);
+
     navigate("/dashboard");
   }
 
