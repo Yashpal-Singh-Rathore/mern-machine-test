@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Agents from "./pages/Agents";
+import Upload from "./pages/Upload";
 
 function App() {
   return (
@@ -29,6 +30,16 @@ function App() {
         element={
           <ProtectedRoute>
             <Agents />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Upload page */}
+      <Route
+        path="/upload"
+        element={
+          <ProtectedRoute>
+            <Upload />
           </ProtectedRoute>
         }
       />

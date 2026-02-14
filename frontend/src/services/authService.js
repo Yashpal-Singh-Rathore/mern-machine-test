@@ -21,10 +21,14 @@ export async function loginUser(email, password) {
 export async function fetchWithAuth(url, options = {}) {
   const token = localStorage.getItem("token");
 
+  // check whether body contain file data or json data
+  // and send header content type depending on that
+  const isFormData = options.body instanceof FormData;
+
   const response = await fetch(url, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       Authorization: `Bearer ${token}`,
       ...(options.headers || {}),
     },

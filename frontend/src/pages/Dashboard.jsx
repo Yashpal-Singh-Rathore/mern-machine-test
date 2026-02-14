@@ -12,6 +12,10 @@ function Dashboard() {
     navigate("/agents");
   }
 
+  function handleUploadTasks() {
+    navigate("/upload");
+  }
+
   return (
     <div>
       <h1>Dashborad</h1>
@@ -24,6 +28,11 @@ function Dashboard() {
       <h2>Agent Management</h2>
 
       <button onClick={handleManageAgents}>Manage Agents</button>
+
+      <hr />
+
+      <h2>Task Distribution</h2>
+      <button onClick={handleUploadTasks}>Upload Tasks</button>
     </div>
   );
 }
