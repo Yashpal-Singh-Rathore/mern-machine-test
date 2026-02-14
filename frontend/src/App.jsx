@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Agents from "./pages/Agents";
 
 function App() {
   return (
@@ -9,15 +10,25 @@ function App() {
       {/* Default route */}
       <Route path="*" element={<Navigate to="/login" />} />
 
-      {/* App pages */}
+      {/* Login page */}
       <Route path="/login" element={<Login />} />
+
+      {/* Dashboard page */}
       <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
-            {" "}
-            {/* ---> checks only existence */}
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Agents page */}
+      <Route
+        path="/agents"
+        element={
+          <ProtectedRoute>
+            <Agents />
           </ProtectedRoute>
         }
       />
