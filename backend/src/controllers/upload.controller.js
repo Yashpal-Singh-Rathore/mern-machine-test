@@ -11,9 +11,6 @@ export const uploadAndDistribute = async (req, res) => {
 
     // 1. Fetch agents
     const agents = await User.find({ role: "agent" });
-    if (agents.length < 5) {
-      return res.status(400).json({ message: "At least 5 agents required" });
-    }
 
     let records = [];
 
@@ -36,7 +33,7 @@ export const uploadAndDistribute = async (req, res) => {
     // 3. Distribute
     const tasksToInsert = records.map((record, index) => ({
       ...record,
-      assignedTo: agents[index % 5]._id,
+      assignedTo: agents[index % agents.length]._id,
     }));
 
     // 4. Save to DB
