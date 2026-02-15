@@ -1,6 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchWithAuth } from "../services/authService";
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+} from "@mui/material";
 
 function AgentDetails() {
   const { id } = useParams();
@@ -39,31 +48,53 @@ function AgentDetails() {
   }
 
   return (
-    <div>
-      <h1>Agent Details</h1>
+    <Container maxWidth="md" sx={{ mt: 6 }}>
+      <Typography variant="h4" gutterBottom>
+        Agent Details
+      </Typography>
 
-      <p>Agent ID: {id}</p>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        Agent ID: {id}
+      </Typography>
 
-      <button onClick={handleBack}>Back to Agents</button>
+      <Button variant="outlined" sx={{ mt: 2, mb: 4 }} onClick={handleBack}>
+        Back to Agents
+      </Button>
 
-      <hr />
-
-      <h2>Assigned Tasks</h2>
+      <Typography variant="h6" gutterBottom>
+        Assigned Tasks
+      </Typography>
 
       {loading ? (
-        <p>Loading tasks...</p>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
       ) : tasks.length === 0 ? (
-        <p>No tasks assigned.</p>
+        <Typography variant="body1">No tasks assigned.</Typography>
       ) : (
-        <ul>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {tasks.map((task) => (
-            <li key={task._id}>
-              {task.firstName} - {task.phone} - {task.notes}
-            </li>
+            <Card key={task._id} elevation={2}>
+              <CardContent>
+                <Typography variant="subtitle1" fontWeight={600}>
+                  {task.firstName}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                  {task.phone}
+                </Typography>
+
+                {task.notes && (
+                  <Typography variant="body2" sx={{ mt: 1 }}>
+                    {task.notes}
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
           ))}
-        </ul>
+        </Box>
       )}
-    </div>
+    </Container>
   );
 }
 

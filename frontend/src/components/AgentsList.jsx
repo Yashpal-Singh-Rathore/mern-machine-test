@@ -1,4 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Box,
+} from "@mui/material";
 
 function AgentList({ agents }) {
   const navigate = useNavigate();
@@ -8,25 +16,24 @@ function AgentList({ agents }) {
   }
 
   return (
-    <div>
-      <h2>Agents List</h2>
-
+    <Box>
       {agents.length === 0 ? (
-        <p>No agents found.</p>
+        <Typography variant="body1">No agents found.</Typography>
       ) : (
-        <ul>
+        <List>
           {agents.map((agent) => (
-            <li
-              key={agent._id}
-              onClick={() => handleAgentClick(agent._id)}
-              style={{ cursor: "pointer", marginBottom: "8px" }}
-            >
-              {agent.name} - {agent.email} - {agent.mobile}
-            </li>
+            <ListItem key={agent._id} disablePadding>
+              <ListItemButton onClick={() => handleAgentClick(agent._id)}>
+                <ListItemText
+                  primary={agent.name}
+                  secondary={`${agent.email} • ${agent.mobile}`}
+                />
+              </ListItemButton>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       )}
-    </div>
+    </Box>
   );
 }
 

@@ -1,5 +1,14 @@
 import { useState } from "react";
 import { fetchWithAuth } from "../services/authService";
+import {
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert,
+} from "@mui/material";
 
 function AgentForm({ onAgentCreated }) {
   const [name, setName] = useState("");
@@ -43,57 +52,63 @@ function AgentForm({ onAgentCreated }) {
   }
 
   return (
-    <div>
-      <h2>Create New Agent</h2>
+    <Card sx={{ mb: 4 }} elevation={3}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          Create New Agent
+        </Typography>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          <TextField
+            label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            fullWidth
           />
-        </div>
 
-        <div>
-          <label>Email:</label>
-          <input
+          <TextField
+            label="Email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            fullWidth
           />
-        </div>
 
-        <div>
-          <label>Mobile:</label>
-          <input
-            type="text"
+          <TextField
+            label="Mobile"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
             required
+            fullWidth
           />
-        </div>
 
-        <div>
-          <label>Password:</label>
-          <input
+          <TextField
+            label="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            fullWidth
           />
-        </div>
 
-        <button type="submit">Create Agent</button>
-      </form>
-
-      <hr />
-    </div>
+          <Button type="submit" variant="contained" size="large">
+            Create Agent
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
 

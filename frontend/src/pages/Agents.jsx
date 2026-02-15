@@ -4,6 +4,8 @@ import { fetchWithAuth } from "../services/authService";
 import AgentList from "../components/AgentsList";
 import AgentForm from "../components/AgentForm";
 
+import { Container, Typography, Button, Box, Paper } from "@mui/material";
+
 function Agents() {
   const navigate = useNavigate();
   const [agents, setAgents] = useState([]);
@@ -32,19 +34,30 @@ function Agents() {
   }
 
   return (
-    <div>
-      <h1>Agent Management</h1>
+    <Container maxWidth="md" sx={{ mt: 6 }}>
+      {/* Page Title */}
+      <Typography variant="h4" gutterBottom>
+        Agent Management
+      </Typography>
 
-      <button onClick={handleBack}>Back to Dashboard</button>
+      {/* Back Button */}
+      <Box sx={{ mb: 3 }}>
+        <Button variant="outlined" onClick={handleBack}>
+          Back to Dashboard
+        </Button>
+      </Box>
 
-      <hr />
-
-      {/* Agent Creation Form */}
+      {/* Agent Creation Section */}
       <AgentForm onAgentCreated={loadAgents} />
 
-      {/* Agent List */}
-      <AgentList agents={agents} />
-    </div>
+      {/* Agent List Section */}
+      <Paper sx={{ p: 3 }} elevation={3}>
+        <Typography variant="h6" gutterBottom>
+          Agents List
+        </Typography>
+        <AgentList agents={agents} />
+      </Paper>
+    </Container>
   );
 }
 
