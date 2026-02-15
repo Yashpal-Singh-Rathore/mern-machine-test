@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Agents from "./pages/Agents";
 import Upload from "./pages/Upload";
+import AgentDetails from "./pages/AgentDetails";
 
 function App() {
   return (
@@ -30,6 +31,16 @@ function App() {
         element={
           <ProtectedRoute>
             <Agents />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Agent Details page */}
+      <Route
+        path="/agents/:id"
+        element={
+          <ProtectedRoute>
+            <AgentDetails />
           </ProtectedRoute>
         }
       />
