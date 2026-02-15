@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 
+import { Container, Typography, Box } from "@mui/material";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -14,10 +16,15 @@ function Login() {
   }
 
   return (
-    <div>
-      <h1>Admin Login</h1>
+    <Container maxWidth="sm" sx={{ mt: 10 }}>
+      <Box sx={{ textAlign: "center", mb: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Admin Login
+        </Typography>
+      </Box>
+
       <LoginForm onSuccess={handleLoginSuccess} />
-    </div>
+    </Container>
   );
 }
 

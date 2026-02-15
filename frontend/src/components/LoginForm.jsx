@@ -1,58 +1,89 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
 
+import {
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
+
 function LoginForm({ onSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  function handleChange(event) {
-    const { name, value } = event.target;
-
-    if (name === "email") setEmail(value);
-    if (name === "password") setPassword(value);
-  }
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const data = await loginUser(email, password);
-      console.log("Login success:", data);
-
       onSuccess(data);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={handleChange}
-        />
-      </div>
+    <Card elevation={4}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          Sign In
+        </Typography>
 
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handleChange}
-        />
-      </div>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
+          <TextField
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            fullWidth
+          />
 
-      <button type="submit">Login</button>
-    </form>
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            fullWidth
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
 
