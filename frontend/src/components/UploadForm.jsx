@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { fetchWithAuth } from "../services/authService";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Stack,
+  Alert,
+} from "@mui/material";
 
 function UploadForm() {
   // Store selected file
@@ -7,6 +15,7 @@ function UploadForm() {
 
   // Store message for UI feedback
   const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
 
   function handleFileChange(event) {
     const selectedFile = event.target.files[0];
@@ -20,12 +29,14 @@ function UploadForm() {
 
     if (!isValid) {
       setMessage("Only csv, xlsx and xls files are allowed.");
+      setError(true);
       setFile(null);
       return;
     }
 
     setFile(selectedFile);
     setMessage("");
+    setError(false);
   }
 
   async function handleSubmit(event) {
@@ -33,6 +44,7 @@ function UploadForm() {
 
     if (!file) {
       setMessage("Please select a file.");
+      setError(true);
       return;
     }
 
@@ -48,23 +60,50 @@ function UploadForm() {
       if (response) {
         const data = await response.json();
         setMessage(data.message);
+        setError(false);
         setFile(null);
       }
     } catch (error) {
       setMessage("Upload failed.");
+      setError(true);
     }
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} />
+    <Card elevation={3}>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <Typography variant="h6">Upload CSV / Excel File</Typography>
 
-        <button type="submit">Upload</button>
-      </form>
+            {/* Hidden file input */}
+            <Button variant="contained" component="label">
+              Select File
+              <input type="file" hidden onChange={handleFileChange} />
+            </Button>
 
-      {message && <p>{message}</p>}
-    </div>
+            {file && (
+              <Typography variant="body2" color="text.secondary">
+                Selected: {file.name}
+              </Typography>
+            )}
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!file}
+            >
+              Upload
+            </Button>
+
+            {message && (
+              <Alert severity={error ? "error" : "success"}>{message}</Alert>
+            )}
+          </Stack>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
 

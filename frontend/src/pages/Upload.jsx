@@ -1,6 +1,8 @@
 import UploadForm from "../components/UploadForm";
 import { useNavigate } from "react-router-dom";
 
+import { Container, Typography, Button, Box } from "@mui/material";
+
 function Upload() {
   const navigate = useNavigate();
 
@@ -9,15 +11,19 @@ function Upload() {
   }
 
   return (
-    <div>
-      <h1>Upload Tasks</h1>
+    <Container maxWidth="md" sx={{ mt: 6 }}>
+      <Typography variant="h4" gutterBottom>
+        Upload Tasks
+      </Typography>
 
-      <button onClick={handleBack}>Back to Dashboard</button>
-
-      <hr />
+      <Box sx={{ mb: 4 }}>
+        <Button variant="outlined" onClick={handleBack}>
+          Back to Dashboard
+        </Button>
+      </Box>
 
       <UploadForm />
-    </div>
+    </Container>
   );
 }
 
