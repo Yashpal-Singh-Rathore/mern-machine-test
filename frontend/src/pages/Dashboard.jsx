@@ -1,4 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Stack,
+} from "@mui/material";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -17,23 +25,49 @@ function Dashboard() {
   }
 
   return (
-    <div>
-      <h1>Dashborad</h1>
-      <p>Welcome to the dashboad page.</p>
+    <Container maxWidth="md" sx={{ mt: 6 }}>
+      <Typography variant="h4" gutterBottom>
+        Dashboard
+      </Typography>
 
-      <button onClick={handleLogout}>Logout</button>
+      <Typography variant="body1" color="text.secondary" gutterBottom>
+        Welcome to the admin dashboard.
+      </Typography>
 
-      <hr />
+      <Stack spacing={4} mt={4}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Agent Management
+            </Typography>
 
-      <h2>Agent Management</h2>
+            <Button variant="contained" onClick={handleManageAgents}>
+              Manage Agents
+            </Button>
+          </CardContent>
+        </Card>
 
-      <button onClick={handleManageAgents}>Manage Agents</button>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Task Distribution
+            </Typography>
 
-      <hr />
+            <Button variant="contained" onClick={handleUploadTasks}>
+              Upload Tasks
+            </Button>
+          </CardContent>
+        </Card>
 
-      <h2>Task Distribution</h2>
-      <button onClick={handleUploadTasks}>Upload Tasks</button>
-    </div>
+        <Card>
+          <CardContent>
+            <Button variant="outlined" color="error" onClick={handleLogout}>
+              Logout
+            </Button>
+          </CardContent>
+        </Card>
+      </Stack>
+    </Container>
   );
 }
 
