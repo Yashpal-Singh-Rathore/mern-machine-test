@@ -1,7 +1,13 @@
-const API_URL = "http://localhost:4000/api/auth";
+// Read base URL from environment
+const BASE_URL = import.meta.env.VITE_API_URL;
+
+// Helper to build full API path
+function buildUrl(path) {
+  return `${BASE_URL}${path}`;
+}
 
 export async function loginUser(email, password) {
-  const response = await fetch(`${API_URL}/login`, {
+  const response = await fetch(buildUrl("/api/auth/login"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,14 +24,12 @@ export async function loginUser(email, password) {
   return data;
 }
 
-export async function fetchWithAuth(url, options = {}) {
+export async function fetchWithAuth(path, options = {}) {
   const token = localStorage.getItem("token");
 
-  // check whether body contain file data or json data
-  // and send header content type depending on that
   const isFormData = options.body instanceof FormData;
 
-  const response = await fetch(url, {
+  const response = await fetch(buildUrl(path), {
     ...options,
     headers: {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
@@ -35,7 +39,6 @@ export async function fetchWithAuth(url, options = {}) {
   });
 
   if (response.status === 401) {
-    // token invalid or expired
     localStorage.removeItem("token");
     window.location.href = "/login";
     return;
@@ -43,7 +46,6 @@ export async function fetchWithAuth(url, options = {}) {
 
   const data = await response.json();
 
-  // Handle any non-success status (400, 409, 500, etc)
   if (!response.ok) {
     throw new Error(data.message || "Request failed");
   }

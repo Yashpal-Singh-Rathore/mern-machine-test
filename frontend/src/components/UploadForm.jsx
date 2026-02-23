@@ -53,7 +53,7 @@ function UploadForm() {
       const formData = new FormData();
       formData.append("file", file); // Must match backend key
 
-      const data = await fetchWithAuth("http://localhost:4000/api/upload", {
+      const data = await fetchWithAuth("/api/upload", {
         method: "POST",
         body: formData,
       });

@@ -25,9 +25,7 @@ function AgentDetails() {
   useEffect(() => {
     async function loadTasks() {
       try {
-        const data = await fetchWithAuth(
-          `http://localhost:4000/api/agents/${id}/tasks`,
-        );
+        const data = await fetchWithAuth(`/api/agents/${id}/tasks`);
 
         setTasks(data);
       } catch (error) {

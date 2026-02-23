@@ -122,7 +122,7 @@ function AgentForm({ onAgentCreated }) {
     setLoading(true);
 
     try {
-      const data = await fetchWithAuth("http://localhost:4000/api/agents", {
+      const data = await fetchWithAuth("/api/agents", {
         method: "POST",
         body: JSON.stringify({
           name: name.trim(),
