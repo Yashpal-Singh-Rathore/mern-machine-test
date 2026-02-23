@@ -13,12 +13,9 @@ function Agents() {
   // Reusable function to fetch agents
   async function loadAgents() {
     try {
-      const response = await fetchWithAuth("http://localhost:4000/api/agents");
+      const data = await fetchWithAuth("http://localhost:4000/api/agents");
 
-      if (response) {
-        const data = await response.json();
-        setAgents(data);
-      }
+      setAgents(data);
     } catch (error) {
       console.error("Error loading agents:", error.message);
     }

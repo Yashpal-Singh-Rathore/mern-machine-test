@@ -52,19 +52,16 @@ function UploadForm() {
       const formData = new FormData();
       formData.append("file", file); // Must match backend key
 
-      const response = await fetchWithAuth("http://localhost:4000/api/upload", {
+      const data = await fetchWithAuth("http://localhost:4000/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      if (response) {
-        const data = await response.json();
-        setMessage(data.message);
-        setError(false);
-        setFile(null);
-      }
+      setMessage(data.message);
+      setError(false);
+      setFile(null);
     } catch (error) {
-      setMessage("Upload failed.");
+      setMessage(error.message || "Upload failed.");
       setError(true);
     }
   }

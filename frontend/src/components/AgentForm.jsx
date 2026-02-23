@@ -122,7 +122,7 @@ function AgentForm({ onAgentCreated }) {
     setLoading(true);
 
     try {
-      const response = await fetchWithAuth("http://localhost:4000/api/agents", {
+      const data = await fetchWithAuth("http://localhost:4000/api/agents", {
         method: "POST",
         body: JSON.stringify({
           name: name.trim(),
@@ -132,17 +132,13 @@ function AgentForm({ onAgentCreated }) {
         }),
       });
 
-      if (response) {
-        const data = await response.json();
+      setName("");
+      setEmail("");
+      setMobile("");
+      setPassword("");
 
-        setName("");
-        setEmail("");
-        setMobile("");
-        setPassword("");
-
-        if (onAgentCreated) {
-          onAgentCreated();
-        }
+      if (onAgentCreated) {
+        onAgentCreated();
       }
     } catch (err) {
       setServerError(err.message);

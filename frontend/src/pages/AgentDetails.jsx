@@ -25,14 +25,11 @@ function AgentDetails() {
   useEffect(() => {
     async function loadTasks() {
       try {
-        const response = await fetchWithAuth(
+        const data = await fetchWithAuth(
           `http://localhost:4000/api/agents/${id}/tasks`,
         );
 
-        if (response) {
-          const data = await response.json();
-          setTasks(data);
-        }
+        setTasks(data);
       } catch (error) {
         console.error("Error loading tasks:", error.message);
       } finally {

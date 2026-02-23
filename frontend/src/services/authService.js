@@ -41,5 +41,12 @@ export async function fetchWithAuth(url, options = {}) {
     return;
   }
 
-  return response;
+  const data = await response.json();
+
+  // Handle any non-success status (400, 409, 500, etc)
+  if (!response.ok) {
+    throw new Error(data.message || "Request failed");
+  }
+
+  return data;
 }
