@@ -7,15 +7,15 @@ import {
   Button,
   Stack,
   Alert,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 
 function UploadForm() {
-  // Store selected file
   const [file, setFile] = useState(null);
-
-  // Store message for UI feedback
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function handleFileChange(event) {
     const selectedFile = event.target.files[0];
@@ -27,26 +27,27 @@ function UploadForm() {
 
     const isValid = allowedExtensions.some((ext) => fileName.endsWith(ext));
 
+    // Clear previous messages whenever new file selected
+    setErrorMessage("");
+    setSuccessMessage("");
+
     if (!isValid) {
-      setMessage("Only csv, xlsx and xls files are allowed.");
-      setError(true);
+      setErrorMessage("Only csv, xlsx and xls files are allowed.");
       setFile(null);
       return;
     }
 
     setFile(selectedFile);
-    setMessage("");
-    setError(false);
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!file) {
-      setMessage("Please select a file.");
-      setError(true);
-      return;
-    }
+    if (!file || loading) return;
+
+    setErrorMessage("");
+    setSuccessMessage("");
+    setLoading(true);
 
     try {
       const formData = new FormData();
@@ -57,24 +58,23 @@ function UploadForm() {
         body: formData,
       });
 
-      setMessage(data.message);
-      setError(false);
+      setSuccessMessage(data.message);
       setFile(null);
-    } catch (error) {
-      setMessage(error.message || "Upload failed.");
-      setError(true);
+    } catch (err) {
+      setErrorMessage(err.message || "Upload failed.");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <Card elevation={3}>
       <CardContent>
-        <form onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={3}>
             <Typography variant="h6">Upload CSV / Excel File</Typography>
 
-            {/* Hidden file input */}
-            <Button variant="contained" component="label">
+            <Button variant="contained" component="label" disabled={loading}>
               Select File
               <input type="file" hidden onChange={handleFileChange} />
             </Button>
@@ -88,17 +88,22 @@ function UploadForm() {
             <Button
               type="submit"
               variant="contained"
-              color="primary"
-              disabled={!file}
+              disabled={!file || loading}
             >
-              Upload
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Upload"
+              )}
             </Button>
 
-            {message && (
-              <Alert severity={error ? "error" : "success"}>{message}</Alert>
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
+            {successMessage && (
+              <Alert severity="success">{successMessage}</Alert>
             )}
           </Stack>
-        </form>
+        </Box>
       </CardContent>
     </Card>
   );
