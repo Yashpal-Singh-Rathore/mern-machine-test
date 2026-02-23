@@ -12,6 +12,10 @@ export const uploadAndDistribute = async (req, res) => {
     // 1. Fetch agents
     const agents = await User.find({ role: "agent" });
 
+    if (!agents.length) {
+      return res.status(400).json({ message: "No agents available" });
+    }
+
     let records = [];
 
     // 2. Parse file
@@ -39,11 +43,22 @@ export const uploadAndDistribute = async (req, res) => {
     // 4. Save to DB
     await Task.insertMany(tasksToInsert);
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "File uploaded and tasks distributed successfully",
       totalTasks: tasksToInsert.length,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // Handle duplicate key error specifically
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "Duplicate phone number detected. Some tasks already exist.",
+        duplicate: error.keyValue,
+      });
+    }
+
+    // Generic fallback
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
