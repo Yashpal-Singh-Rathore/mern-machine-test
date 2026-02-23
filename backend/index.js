@@ -8,27 +8,33 @@ import agentRoutes from "./src/routes/agent.routes.js";
 import uploadRoutes from "./src/routes/upload.routes.js";
 
 dotenv.config();
-// connect to database
+
+// Connect to database
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// middleware
+//  Read frontend URL from environment
+const allowedOrigin = process.env.FRONTEND_URL;
+
+// Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: allowedOrigin,
     credentials: true,
   }),
 );
+
 app.use(express.json());
 
-// mount routes
+// Routes
 app.use("/", indexRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/agents", agentRoutes);
 app.use("/api", uploadRoutes);
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
