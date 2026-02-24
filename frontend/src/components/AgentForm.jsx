@@ -54,7 +54,7 @@ function AgentForm({ onAgentCreated }) {
     if (name === "mobile") {
       if (!trimmedValue) return "Mobile number is required";
 
-      const mobilePattern = /^[0-9]{10,15}$/;
+      const mobilePattern = /^\+?[1-9]\d{9,14}$/;
 
       if (!mobilePattern.test(trimmedValue))
         return "Enter a valid mobile number (10-15 digits)";
