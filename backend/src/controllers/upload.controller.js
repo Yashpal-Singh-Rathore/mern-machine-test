@@ -2,18 +2,19 @@ import csv from "csv-parser";
 import xlsx from "xlsx";
 import Task from "../models/task.model.js";
 import User from "../models/user.model.js";
+import AppError from "../utils/AppError.js";
 
-export const uploadAndDistribute = async (req, res) => {
+export const uploadAndDistribute = async (req, res, next) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "File is required" });
+      return next(new AppError("File is required", 400));
     }
 
     // 1. Fetch agents
     const agents = await User.find({ role: "agent" });
 
     if (!agents.length) {
-      return res.status(400).json({ message: "No agents available" });
+      return next(new AppError("No agents available", 400));
     }
 
     let records = [];
@@ -50,15 +51,15 @@ export const uploadAndDistribute = async (req, res) => {
   } catch (error) {
     // Handle duplicate key error specifically
     if (error.code === 11000) {
-      return res.status(409).json({
-        message: "Duplicate phone number detected. Some tasks already exist.",
-        duplicate: error.keyValue,
-      });
+      return next(
+        new AppError(
+          "Duplicate phone number detected. Some tasks already exist.",
+          409,
+        ),
+      );
     }
 
     // Generic fallback
-    return res.status(500).json({
-      message: "Internal server error",
-    });
+    next(error);
   }
 };

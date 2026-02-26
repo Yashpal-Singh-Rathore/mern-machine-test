@@ -1,27 +1,28 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import AppError from "../utils/AppError.js";
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     // validation
     if (!email || !password) {
-      return res.status(400).json({ message: "Email an password required" });
+      return next(new AppError("Email and password required", 400));
     }
 
     // find user
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return next(new AppError("Invalid credentials", 401));
     }
 
     // compare password
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return next(new AppError("Invalid credentials", 401));
     }
 
     // create token
@@ -42,6 +43,6 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    next(error);
   }
 };
